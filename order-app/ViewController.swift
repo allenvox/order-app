@@ -21,9 +21,9 @@ class ViewController: UIViewController {
     }
     
     var order: Order = Order(screenTitle: "Заказ 123", promocodes: [
-        Order.Promocode(title: "ARBUZ", percent: 7, endDate: Date(timeIntervalSince1970: 1730419200), info: "Wow", active: false),
-        Order.Promocode(title: "VESNA24", percent: 15, endDate: Date(timeIntervalSince1970: 1730419200), info: "Spring", active: false),
-        Order.Promocode(title: "ETERNAL", percent: 22, endDate: nil, info: "From the future", active: false)
+        Order.Promocode(title: "ARBUZ", percent: 10, endDate: Date(timeIntervalSince1970: 1730419200), info: "Применим только на самые вкусные арбузы весом от 10 кг", active: false),
+        Order.Promocode(title: "VESNA24", percent: 24, endDate: Date(timeIntervalSince1970: 1730419200), info: "Встречаем весну вместе с лучшими скидками!", active: false),
+        Order.Promocode(title: "ETERNAL", percent: 8, endDate: nil, info: "Пользуйтесь в любой день!", active: false)
     ], products: [
         Order.Product(price: 10000, title: "Apple Pencil 2nd gen."),
         Order.Product(price: 15000, title: "iPad 6th gen.")
@@ -38,7 +38,7 @@ class ViewController: UIViewController {
         view.addSubview(headerLabel)
 
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -5),
             headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
@@ -50,7 +50,7 @@ class ViewController: UIViewController {
         view.addSubview(separatorView)
         
         NSLayoutConstraint.activate([
-            separatorView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 10),
+            separatorView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 5),
             separatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             separatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             separatorView.heightAnchor.constraint(equalToConstant: 10)
@@ -66,7 +66,7 @@ class ViewController: UIViewController {
         view.addSubview(promocodeTitleLabel)
         
         NSLayoutConstraint.activate([
-            promocodeTitleLabel.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 10),
+            promocodeTitleLabel.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 7),
             promocodeTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
         ])
         
@@ -78,7 +78,7 @@ class ViewController: UIViewController {
         view.addSubview(promocodeInfoLabel)
         
         NSLayoutConstraint.activate([
-            promocodeInfoLabel.topAnchor.constraint(equalTo: promocodeTitleLabel.bottomAnchor, constant: 8),
+            promocodeInfoLabel.topAnchor.constraint(equalTo: promocodeTitleLabel.bottomAnchor, constant: 5),
             promocodeInfoLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             promocodeInfoLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
@@ -99,7 +99,7 @@ class ViewController: UIViewController {
         view.addSubview(applyPromoButton)
         
         NSLayoutConstraint.activate([
-            applyPromoButton.topAnchor.constraint(equalTo: promocodeInfoLabel.bottomAnchor, constant: 15),
+            applyPromoButton.topAnchor.constraint(equalTo: promocodeInfoLabel.bottomAnchor, constant: 13),
             applyPromoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             applyPromoButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             applyPromoButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
@@ -111,12 +111,12 @@ class ViewController: UIViewController {
     private func setupPromocodeStack() {
         promocodeStackView.backgroundColor = .white
         promocodeStackView.axis = .vertical
-        promocodeStackView.spacing = 15
+        promocodeStackView.spacing = 13
         promocodeStackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(promocodeStackView)
         
         NSLayoutConstraint.activate([
-            promocodeStackView.topAnchor.constraint(equalTo: applyPromoButton.bottomAnchor, constant: 15),
+            promocodeStackView.topAnchor.constraint(equalTo: applyPromoButton.bottomAnchor, constant: 13),
             promocodeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             promocodeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
@@ -130,7 +130,7 @@ class ViewController: UIViewController {
         let promocodeView = UIView()
         promocodeView.backgroundColor = UIColor(hex: "#F6F6F6")
         promocodeView.layer.cornerRadius = 15
-        promocodeView.heightAnchor.constraint(equalToConstant: 72).isActive = true
+        promocodeView.heightAnchor.constraint(equalToConstant: 84).isActive = true
         promocodeView.translatesAutoresizingMaskIntoConstraints = false
         
         let titleLabel = UILabel()
@@ -141,6 +141,7 @@ class ViewController: UIViewController {
         
         let discountLabel = UILabel()
         discountLabel.text = " \(promocode.percent)%  "
+        discountLabel.font = UIFont.systemFont(ofSize: 16)
         discountLabel.backgroundColor = UIColor(hex: "#00B775")
         discountLabel.textColor = .white
         discountLabel.layer.cornerRadius = 10
@@ -156,12 +157,19 @@ class ViewController: UIViewController {
         
         let expirationLabel = UILabel()
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yy"
-        let formattedDate = dateFormatter.string(from: promocode.endDate ?? Date(timeIntervalSinceNow: 9999999999))
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let formattedDate = dateFormatter.string(from: promocode.endDate ?? Date(timeIntervalSinceNow: 999999999))
         expirationLabel.text = "Срок действия: \(formattedDate)"
         expirationLabel.font = UIFont.systemFont(ofSize: 12)
         expirationLabel.translatesAutoresizingMaskIntoConstraints = false
         promocodeView.addSubview(expirationLabel)
+        
+        let infoLabel = UILabel()
+        infoLabel.text = promocode.info ?? ""
+        infoLabel.font = UIFont.systemFont(ofSize: 12)
+        infoLabel.numberOfLines = 1
+        infoLabel.translatesAutoresizingMaskIntoConstraints = false
+        promocodeView.addSubview(infoLabel)
         
         let circleLeft = UIView()
         circleLeft.backgroundColor = .white
@@ -183,21 +191,20 @@ class ViewController: UIViewController {
         promocodeView.addSubview(activeSwitch)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: promocodeView.topAnchor, constant: 13),
-            titleLabel.leadingAnchor.constraint(equalTo: promocodeView.leadingAnchor, constant: 30),
+            titleLabel.topAnchor.constraint(equalTo: promocodeView.topAnchor, constant: 11),
+            titleLabel.leadingAnchor.constraint(equalTo: promocodeView.leadingAnchor, constant: 22),
             
-            discountLabel.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 1),
+            discountLabel.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             discountLabel.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 5),
             
-            infoButton.topAnchor.constraint(equalTo: discountLabel.topAnchor),
             infoButton.leadingAnchor.constraint(equalTo: discountLabel.trailingAnchor, constant: 5),
-            infoButton.topAnchor.constraint(equalTo: discountLabel.topAnchor, constant: -3),
+            infoButton.centerYAnchor.constraint(equalTo: discountLabel.centerYAnchor),
             
-            expirationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7),
-            expirationLabel.leadingAnchor.constraint(equalTo: promocodeView.leadingAnchor, constant: 30),
+            expirationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
+            expirationLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             
-            activeSwitch.centerYAnchor.constraint(equalTo: promocodeView.centerYAnchor, constant: -3),
-            activeSwitch.trailingAnchor.constraint(equalTo: promocodeView.trailingAnchor, constant: -35),
+            activeSwitch.centerYAnchor.constraint(equalTo: promocodeView.centerYAnchor, constant: -10),
+            activeSwitch.trailingAnchor.constraint(equalTo: promocodeView.trailingAnchor, constant: -28),
             
             circleLeft.heightAnchor.constraint(equalToConstant: 20),
             circleLeft.widthAnchor.constraint(equalToConstant: 20),
@@ -207,7 +214,11 @@ class ViewController: UIViewController {
             circleRight.heightAnchor.constraint(equalToConstant: 20),
             circleRight.widthAnchor.constraint(equalToConstant: 20),
             circleRight.centerYAnchor.constraint(equalTo: promocodeView.centerYAnchor),
-            circleRight.trailingAnchor.constraint(equalTo: promocodeView.trailingAnchor, constant: 10)
+            circleRight.trailingAnchor.constraint(equalTo: promocodeView.trailingAnchor, constant: 10),
+            
+            infoLabel.topAnchor.constraint(equalTo: expirationLabel.bottomAnchor, constant: 5),
+            infoLabel.trailingAnchor.constraint(equalTo: promocodeView.trailingAnchor, constant: -20),
+            infoLabel.leadingAnchor.constraint(equalTo: expirationLabel.leadingAnchor)
         ])
         promocodeStackView.addArrangedSubview(promocodeView)
     }
@@ -239,7 +250,7 @@ class ViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             hidePromoButton.topAnchor.constraint(equalTo: promocodeStackView.bottomAnchor, constant: 5),
-            hidePromoButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 40)
+            hidePromoButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 35)
         ])
     }
     
@@ -259,6 +270,7 @@ class ViewController: UIViewController {
         
         let priceTitleLabel = UILabel()
         priceTitleLabel.text = "Цена за товары"
+        priceTitleLabel.font = UIFont.systemFont(ofSize: 14)
         priceTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         footerView.addSubview(priceTitleLabel)
         totalPriceLabel.font = UIFont.systemFont(ofSize: 14)
@@ -267,6 +279,7 @@ class ViewController: UIViewController {
         
         let discountTitleLabel = UILabel()
         discountTitleLabel.text = "Скидка"
+        discountTitleLabel.font = UIFont.systemFont(ofSize: 14)
         discountTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         footerView.addSubview(discountTitleLabel)
         discountLabel.font = UIFont.systemFont(ofSize: 14)
@@ -276,6 +289,7 @@ class ViewController: UIViewController {
         
         let promocodeDiscountTitleLabel = UILabel()
         promocodeDiscountTitleLabel.text = "Промокоды"
+        promocodeDiscountTitleLabel.font = UIFont.systemFont(ofSize: 14)
         promocodeDiscountTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         footerView.addSubview(promocodeDiscountTitleLabel)
         promocodeDiscountLabel.font = UIFont.systemFont(ofSize: 14)
@@ -289,6 +303,7 @@ class ViewController: UIViewController {
         
         let paymentDiscountTitleLabel = UILabel()
         paymentDiscountTitleLabel.text = "Способ оплаты"
+        paymentDiscountTitleLabel.font = UIFont.systemFont(ofSize: 14)
         paymentDiscountTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         footerView.addSubview(paymentDiscountTitleLabel)
         paymentDiscountLabel.font = UIFont.systemFont(ofSize: 14)
@@ -302,10 +317,10 @@ class ViewController: UIViewController {
 
         let finalPriceTitleLabel = UILabel()
         finalPriceTitleLabel.text = "Итого"
-        finalPriceTitleLabel.font = UIFont.systemFont(ofSize: 17)
+        finalPriceTitleLabel.font = UIFont.systemFont(ofSize: 20)
         finalPriceTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         footerView.addSubview(finalPriceTitleLabel)
-        finalPriceLabel.font = UIFont.systemFont(ofSize: 17)
+        finalPriceLabel.font = UIFont.systemFont(ofSize: 20)
         finalPriceLabel.translatesAutoresizingMaskIntoConstraints = false
         footerView.addSubview(finalPriceLabel)
 
@@ -319,13 +334,15 @@ class ViewController: UIViewController {
         orderButton.addTarget(self, action: #selector(validateOrder), for: .touchUpInside)
         footerView.addSubview(orderButton)
         
+        
         let legalsLabel = UILabel()
-        legalsLabel.text = "Нажимая на кнопку «Оформить заказ», Вы соглашатесь с Условиями оферты"
+        var attr = NSMutableAttributedString(string: "Нажимая на кнопку «Оформить заказ», Вы соглашаетесь с ", attributes: [.foregroundColor: UIColor.gray])
+        attr.append(NSMutableAttributedString(string: "Условиями оферты", attributes: [.foregroundColor: UIColor.black]))
+        legalsLabel.attributedText = attr
         legalsLabel.numberOfLines = 0
         legalsLabel.lineBreakMode = .byWordWrapping
         legalsLabel.widthAnchor.constraint(equalToConstant: 290).isActive = true
         legalsLabel.font = UIFont.systemFont(ofSize: 12)
-        legalsLabel.textColor = UIColor(hex: "#CCCCCC")
         legalsLabel.textAlignment = .center
         legalsLabel.translatesAutoresizingMaskIntoConstraints = false
         footerView.addSubview(legalsLabel)
@@ -351,7 +368,7 @@ class ViewController: UIViewController {
             promocodeDiscountTitleLabel.topAnchor.constraint(equalTo: discountLabel.bottomAnchor, constant: 15),
             promocodeDiscountTitleLabel.leadingAnchor.constraint(equalTo: priceTitleLabel.leadingAnchor),
             
-            infoButton.topAnchor.constraint(equalTo: promocodeDiscountTitleLabel.topAnchor, constant: -3),
+            infoButton.centerYAnchor.constraint(equalTo: promocodeDiscountTitleLabel.centerYAnchor),
             infoButton.leadingAnchor.constraint(equalTo: promocodeDiscountTitleLabel.trailingAnchor, constant: 5),
             
             promocodeDiscountLabel.topAnchor.constraint(equalTo: promocodeDiscountTitleLabel.topAnchor),
@@ -363,17 +380,17 @@ class ViewController: UIViewController {
             paymentDiscountLabel.topAnchor.constraint(equalTo: paymentDiscountTitleLabel.topAnchor),
             paymentDiscountLabel.trailingAnchor.constraint(equalTo: totalPriceLabel.trailingAnchor),
             
-            priceSeparatorView.topAnchor.constraint(equalTo: paymentDiscountLabel.bottomAnchor, constant: 15),
+            priceSeparatorView.topAnchor.constraint(equalTo: paymentDiscountLabel.bottomAnchor, constant: 13),
             priceSeparatorView.leadingAnchor.constraint(equalTo: priceTitleLabel.leadingAnchor),
             priceSeparatorView.trailingAnchor.constraint(equalTo: totalPriceLabel.trailingAnchor),
             priceSeparatorView.heightAnchor.constraint(equalToConstant: 1),
             
-            finalPriceTitleLabel.topAnchor.constraint(equalTo: priceSeparatorView.bottomAnchor, constant: 15),
+            finalPriceTitleLabel.topAnchor.constraint(equalTo: priceSeparatorView.bottomAnchor, constant: 12),
             finalPriceTitleLabel.leadingAnchor.constraint(equalTo: priceTitleLabel.leadingAnchor),
             finalPriceLabel.topAnchor.constraint(equalTo: finalPriceTitleLabel.topAnchor),
             finalPriceLabel.trailingAnchor.constraint(equalTo: totalPriceLabel.trailingAnchor),
             
-            orderButton.topAnchor.constraint(equalTo: finalPriceLabel.bottomAnchor, constant: 15),
+            orderButton.topAnchor.constraint(equalTo: finalPriceLabel.bottomAnchor, constant: 11),
             orderButton.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 40),
             orderButton.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -40),
             orderButton.heightAnchor.constraint(equalToConstant: 55),
